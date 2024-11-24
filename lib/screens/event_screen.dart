@@ -12,6 +12,7 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen> {
   late EventModel event;
+  bool expandedText = false;
 
   @override
   void initState() {
@@ -61,7 +62,7 @@ class _EventScreenState extends State<EventScreen> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(
-                  event.location ?? 'unknown location',// ?? event.organizer.location,
+                  event.location ?? 'unknown location', // ?? event.organizer.location,
                 ),
               ), // FIXME: set location to null)
 
@@ -70,10 +71,18 @@ class _EventScreenState extends State<EventScreen> {
               ),
               Text(
                 event.description,
-                maxLines: 5,
+                maxLines: expandedText ? null : 5,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              TextButton(onPressed: () {}, child: const Text("Čitaj dalje")),
+              if (!expandedText)
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      expandedText = !expandedText;
+                    });
+                  },
+                  child: const Text("Čitaj dalje"),
+                ),
               ExpansionTile(
                 title: const Text("Sve informacije"),
                 children: [
@@ -81,8 +90,10 @@ class _EventScreenState extends State<EventScreen> {
                   Text(event.startDatetime.toString()),
                   Text("Parking: ${event.organizer?.hasParking ?? false ? "Dostupno" : "Nedostupno"}"),
                   Text("Ljubimci dobrodošli: ${event.organizer?.petFriendly ?? true ? "Da" : "Ne"}"),
-                  Text("Rampa za kolice: ${event.organizer?.wheelchairAccessibleEntry ?? true ? "Dostupno" : "Nedostupno"}"),
-                  Text("WC za invalide: ${event.organizer?.wheelchairAccessibleWc ?? true ? "Dostupan" : "Nedostupan"}"),
+                  Text(
+                      "Rampa za kolice: ${event.organizer?.wheelchairAccessibleEntry ?? true ? "Dostupno" : "Nedostupno"}"),
+                  Text(
+                      "WC za invalide: ${event.organizer?.wheelchairAccessibleWc ?? true ? "Dostupan" : "Nedostupan"}"),
                 ],
               ),
               ExpansionTile(

@@ -130,14 +130,14 @@ class _FilterScreenState extends State<FilterScreen> {
                                   (e) => FilterCheckboxListTile(
                                     title: e.name,
                                     value: e.id,
-                                    checked: selectedDistricts.contains(e.id),
+                                    checked: selectedTypes.contains(e.id),
                                     onChanged: (selected) {
                                       setState(() {
                                         if (selected != null) {
-                                          if (selectedDistricts.contains(e.id)) {
-                                            selectedDistricts.removeWhere((element) => element == e.id);
+                                          if (selectedTypes.contains(e.id)) {
+                                            selectedTypes.removeWhere((element) => element == e.id);
                                           } else {
-                                            selectedDistricts.add(e.id);
+                                            selectedTypes.add(e.id);
                                           }
                                         }
                                       });
@@ -156,15 +156,15 @@ class _FilterScreenState extends State<FilterScreen> {
                                 .map(
                                   (e) => FilterCheckboxListTile(
                                     title: e.name,
-                                    checked: false,
+                                    checked: selectedDistricts.contains(e.id),
                                     value: e.id,
                                     onChanged: (selected) {
                                       setState(() {
                                         if (selected != null) {
-                                          if (selectedTypes.contains(e.id)) {
-                                            selectedTypes.removeWhere((element) => element == e.id);
+                                          if (selectedDistricts.contains(e.id)) {
+                                            selectedDistricts.removeWhere((element) => element == e.id);
                                           } else {
-                                            selectedTypes.add(e.id);
+                                            selectedDistricts.add(e.id);
                                           }
                                         }
                                       });
@@ -214,8 +214,21 @@ class _FilterScreenState extends State<FilterScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  FilledButton.tonal(
+                    onPressed: hasFilters() ? () {
+                      selectedDistricts.clear();
+                      selectedTypes.clear();
+                      selectedDates.clear();
+                      selectedPrices.clear();
+                      setState(() {});
+                    } : null,
+                    child: const Text("Obriši filtere"),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
                   FilledButton(
-                    onPressed: () {
+                    onPressed: hasFilters() ? () {
                       context.read<EventsCubit>().loadEventsWithFilters(
                             districts: selectedDistricts,
                             types: selectedTypes,
@@ -223,7 +236,7 @@ class _FilterScreenState extends State<FilterScreen> {
                             prices: selectedPrices,
                           );
                       Navigator.pop(context);
-                    },
+                    } : null,
                     child: const Text("Filtriraj"),
                   ),
                 ],
@@ -233,6 +246,9 @@ class _FilterScreenState extends State<FilterScreen> {
         ),
       ),
     );
+  }
+  bool hasFilters() {
+    return selectedDistricts.isNotEmpty || selectedPrices.isNotEmpty || selectedDates.isNotEmpty || selectedTypes.isNotEmpty;
   }
 }
 

@@ -134,6 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: PageView(
         controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           HomeScreen(onChangePage: (index, {bool focusSearch = false}) {
             _pageController.jumpToPage(index);
