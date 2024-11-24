@@ -133,15 +133,27 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: PageView(
         controller: _pageController,
-        children: const [
-          HomeScreen(),
-          EventsScreen(),
-          MapScreen(),
-          ProfileScreen(),
+        children: [
+          HomeScreen(onChangePage: (index, {bool focusSearch = false}) {
+            _pageController.jumpToPage(index);
+            setState(() {});
+            if (focusSearch) {
+              focusNotifier.value = focusSearch;
+            }
+          }),
+          EventsScreen(searchFocusNotifier: focusNotifier),
+          const MapScreen(),
+          const ProfileScreen(),
         ],
       ),
     );
   }
+
+  final SearchFocusNotifier focusNotifier = SearchFocusNotifier(false);
+}
+
+class SearchFocusNotifier extends ValueNotifier<bool> {
+  SearchFocusNotifier(super.value);
 }
 
 class ProfileScreen extends StatelessWidget {

@@ -8,7 +8,9 @@ import 'package:hackl/models/models.dart';
 import 'package:hackl/screens/event_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final void Function(dynamic index, {bool focusSearch}) onChangePage;
+
+  const HomeScreen({super.key, required this.onChangePage});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -26,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Stack(
             children: [
               Image.asset('assets/app_bar_background.jpeg'),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Column(
                   children: [
@@ -42,8 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: 16,
                     ),
-                    SearchBar(
-                      hintText: "Wadayouwant?",
+                    Stack(
+                      children: [
+                        SearchBar(
+                          hintText: "Što želiš gledati?",
+                        ),
+                        Positioned.fill(child: InkWell(child: Container(),onTap: () {
+                          widget.onChangePage(1, focusSearch: true);
+                        },))
+                      ],
                     ),
                   ],
                 ),
@@ -61,7 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               FilledButton(
-                onPressed: () {},
+                onPressed: () {
+                  widget.onChangePage(1, focusSearch: true);
+                },
                 child: const Text('Pronađi događaj za sebe'),
               ),
             ],

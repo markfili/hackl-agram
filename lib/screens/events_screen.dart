@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hackl/blocs/events/events_cubit.dart';
+import 'package:hackl/main.dart';
 
 import 'event_screen.dart';
 import 'filter_screen.dart';
 
 class EventsScreen extends StatefulWidget {
-  const EventsScreen({super.key});
+  const EventsScreen({super.key, required this.searchFocusNotifier});
+
+  final SearchFocusNotifier searchFocusNotifier;
 
   @override
   State<EventsScreen> createState() => _EventsScreenState();
@@ -14,6 +17,25 @@ class EventsScreen extends StatefulWidget {
 
 class _EventsScreenState extends State<EventsScreen> {
   final SearchController searchController = SearchController();
+  final FocusNode _searchFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.searchFocusNotifier.addListener(_listenToFocus);
+  }
+
+  void _listenToFocus() {
+    if (widget.searchFocusNotifier.value) {
+      _searchFocusNode.requestFocus();
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.searchFocusNotifier.removeListener(_listenToFocus);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +52,7 @@ class _EventsScreenState extends State<EventsScreen> {
       body: Column(
         children: [
           SearchBar(
+            focusNode: _searchFocusNode,
             controller: searchController,
             padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
             onChanged: (value) {
