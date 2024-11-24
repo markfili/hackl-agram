@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "170814492457",
+    "project_id": "hackl-agram",
+    "storage_bucket": "hackl-agram.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170814492457:android:4adfc0b10d6eb8801d7138",
+        "android_client_info": {
+          "package_name": "hr.gradzagreb.hackl"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS2Wkga6-pYTgLb7gG6cxzIjW4WBZzI78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
