@@ -249,17 +249,23 @@ class FiltersRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      children: items
-          .map(
-            (e) => FilterChip(
-              label: Text(e.title),
-              selected: e.selected,
-              onSelected: (value) => onSelected.call(value, e.value),
-            ),
-          )
-          .toList(),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Wrap(
+        spacing: 8,
+        children: items
+            .map(
+              (e) => FilterChip(
+                label: Text(
+                  e.title,
+                  style: TextStyle(color: e.selected ? Colors.blue : null),
+                ),
+                selected: e.selected,
+                onSelected: (value) => onSelected.call(value, e.value),
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }
@@ -310,6 +316,22 @@ class FilterExpansionPanel extends ExpansionPanel {
     required this.title,
   }) : super(
           canTapOnHeader: true,
-          headerBuilder: (context, isExpanded) => Text(title),
+          headerBuilder: (context, isExpanded) => Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: isExpanded ? Colors.blue : null,
+                    fontWeight: FontWeight.w700,
+                    fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
 }

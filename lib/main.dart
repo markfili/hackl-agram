@@ -10,6 +10,7 @@ import 'package:hackl/data/repositories/events_repository.dart';
 import 'package:hackl/data/repositories/filters_repository.dart';
 import 'package:hackl/data/repositories/home_repository.dart';
 import 'package:hackl/data/sources/remote_source.dart';
+import 'package:hackl/screens/event_screen.dart';
 import 'package:hackl/screens/events_screen.dart';
 import 'package:hackl/screens/map_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -167,7 +168,7 @@ class ProfileScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Expanded(child: const Placeholder()),
+          const Expanded(child: Placeholder()),
           FutureBuilder(
             future: PackageInfo.fromPlatform(),
             builder: (context, snapshot) {
@@ -198,40 +199,76 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class FeaturedEvent extends StatelessWidget {
-  final String title;
+  final EventModel event;
 
-  const FeaturedEvent(this.title, {super.key});
+  const FeaturedEvent(this.event, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.hardEdge,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(children: [
-            Image.network('https://picsum.photos/500/300'),
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.heart_broken,
-                    color: Colors.white,
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => EventScreen(event),
+        ));
+      },
+      child: Card(
+        clipBehavior: Clip.hardEdge,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                Card(
+                  clipBehavior: Clip.hardEdge,
+                  child: Image.network('https://picsum.photos/500/300'),
+                ),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.favorite,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
+                )
+              ],
+            ),
+            ListTile(
+              title: Text(
+                event.name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
                 ),
               ),
-            )
-          ]),
-          Text(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      if (event.eventType != null) Text(event.eventType?.name ?? ''),
+                      const Spacer(),
+                      const Icon(Icons.chevron_right),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          event.description,
+                          maxLines: 3,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -248,24 +285,30 @@ class NormalEvent extends StatelessWidget {
       child: Column(
         children: [
           Flexible(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Image.network(
-                    'https://picsum.photos/300/300?v${event.hashCode}',
-                    fit: BoxFit.fitWidth,
+            child: Card(
+              clipBehavior: Clip.hardEdge,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Image.network(
+                      'https://picsum.photos/300/300?v${event.hashCode}',
+                      fit: BoxFit.fitWidth,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          Text(
-            event.name,
-            maxLines: 2,
-            style: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 20,
+          ListTile(
+            title: Text(
+              event.name,
+              maxLines: 2,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
             ),
+            subtitle: event.eventType != null ? Text(event.eventType?.name ?? '') : null,
           )
         ],
       ),
