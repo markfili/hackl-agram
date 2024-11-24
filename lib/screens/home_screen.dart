@@ -73,17 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  List<String> getRandomEvents(int count) {
-    int returnCount = 0;
-    return events.where(
-      (element) {
-        if (returnCount == count) return false;
-        returnCount++;
-        return DateTime.now().millisecondsSinceEpoch & 2 == 0;
-      },
-    ).toList();
-  }
-
   String getRandomEvent() {
     int random = Random().nextInt(events.length);
     return events[random];

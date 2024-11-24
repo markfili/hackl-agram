@@ -1,15 +1,19 @@
+import 'package:awesome_dio_interceptor/awesome_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hackl/blocs/events/events_cubit.dart';
+import 'package:hackl/blocs/filters/filters_cubit.dart';
 import 'package:hackl/blocs/home/home_cubit.dart';
 import 'package:hackl/data/network/api_client.dart';
 import 'package:hackl/data/repositories/events_repository.dart';
+import 'package:hackl/data/repositories/filters_repository.dart';
 import 'package:hackl/data/repositories/home_repository.dart';
 import 'package:hackl/data/sources/remote_source.dart';
 import 'package:hackl/screens/event_screen.dart';
 import 'package:hackl/screens/events_screen.dart';
 import 'package:hackl/screens/map_screen.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'models/models.dart';
 import 'screens/home_screen.dart';
@@ -38,7 +42,7 @@ class MyApp extends StatelessWidget {
                 queryParameters: {'format': 'json'},
                 headers: {'X-Pinggy-No-Screen': '123'},
               ),
-            ),
+            )..interceptors.add(AwesomeDioInterceptor()),
           ),
         ),
         child: MultiRepositoryProvider(
@@ -53,6 +57,11 @@ class MyApp extends StatelessWidget {
                 remoteSource: context.read<RemoteSource>(),
               ),
             ),
+            RepositoryProvider<FiltersRepository>(
+              create: (context) => FiltersRepository(
+                remoteSource: context.read<RemoteSource>(),
+              ),
+            ),
           ],
           child: MultiBlocProvider(
             providers: [
@@ -62,7 +71,14 @@ class MyApp extends StatelessWidget {
                 ),
               ),
               BlocProvider<EventsCubit>(
-                create: (context) => EventsCubit(repository: context.read<EventsRepository>()),
+                create: (context) => EventsCubit(
+                  repository: context.read<EventsRepository>(),
+                ),
+              ),
+              BlocProvider<FiltersCubit>(
+                create: (context) => FiltersCubit(
+                  repository: context.read<FiltersRepository>(),
+                ),
               ),
             ],
             child: const MyHomePage(),
@@ -122,31 +138,50 @@ class _MyHomePageState extends State<MyHomePage> {
           HomeScreen(),
           EventsScreen(),
           MapScreen(),
-          Placeholder(),
+          ProfileScreen(),
         ],
       ),
     );
   }
 }
 
-class FiltersRow extends StatelessWidget {
-  final List<String> filters;
-
-  const FiltersRow(this.filters, {super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      crossAxisAlignment: WrapCrossAlignment.start,
-      spacing: 8,
-      children: filters
-          .map(
-            (e) => FilterChip(
-              label: Text(e),
-              onSelected: (bool value) {},
-            ),
-          )
-          .toList(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Vaš profil"),
+      ),
+      body: Column(
+        children: [
+          Expanded(child: const Placeholder()),
+          FutureBuilder(
+            future: PackageInfo.fromPlatform(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final data = snapshot.requireData;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: AboutListTile(
+                        icon: const Icon(
+                          Icons.info,
+                        ),
+                        applicationName: data.appName,
+                        applicationVersion: data.version,
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox();
+            },
+          ),
+        ],
+      ),
     );
   }
 }
