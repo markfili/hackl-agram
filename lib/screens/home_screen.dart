@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hackl/blocs/home/home_cubit.dart';
 import 'package:hackl/main.dart';
 import 'package:hackl/models/models.dart';
+import 'package:hackl/screens/event_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -104,6 +105,11 @@ class EventGroupCarousel extends StatelessWidget {
             itemExtent: 330,
             shrinkExtent: 250,
             children: group.map((e) => NormalEvent(e)).toList(),
+            onTap: (value) {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => EventScreen(group[value]),
+              ));
+            },
           ),
         ),
       ],

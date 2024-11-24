@@ -10,7 +10,6 @@ import 'package:hackl/data/repositories/events_repository.dart';
 import 'package:hackl/data/repositories/filters_repository.dart';
 import 'package:hackl/data/repositories/home_repository.dart';
 import 'package:hackl/data/sources/remote_source.dart';
-import 'package:hackl/screens/event_screen.dart';
 import 'package:hackl/screens/events_screen.dart';
 import 'package:hackl/screens/map_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -233,37 +232,30 @@ class NormalEvent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => EventScreen(event),
-        ));
-      },
-      child: Card(
-        child: Column(
-          children: [
-            Flexible(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Image.network(
-                      'https://picsum.photos/300/300?v${event.hashCode}',
-                      fit: BoxFit.fitWidth,
-                    ),
+    return Card(
+      child: Column(
+        children: [
+          Flexible(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Image.network(
+                    'https://picsum.photos/300/300?v${event.hashCode}',
+                    fit: BoxFit.fitWidth,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Text(
-              event.name,
-              maxLines: 2,
-              style: const TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 20,
-              ),
-            )
-          ],
-        ),
+          ),
+          Text(
+            event.name,
+            maxLines: 2,
+            style: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 20,
+            ),
+          )
+        ],
       ),
     );
   }

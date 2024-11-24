@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hackl/blocs/events/events_cubit.dart';
 
-import '../models/models.dart';
 import 'event_screen.dart';
 import 'filter_screen.dart';
 
@@ -15,6 +14,7 @@ class EventsScreen extends StatefulWidget {
 
 class _EventsScreenState extends State<EventsScreen> {
   final SearchController searchController = SearchController();
+
   @override
   Widget build(BuildContext context) {
     final events = context.watch<EventsCubit>().state.events;
@@ -29,7 +29,8 @@ class _EventsScreenState extends State<EventsScreen> {
       ),
       body: Column(
         children: [
-          SearchBar(controller: searchController,
+          SearchBar(
+            controller: searchController,
             padding: const WidgetStatePropertyAll<EdgeInsets>(EdgeInsets.symmetric(horizontal: 16.0)),
             onChanged: (value) {
               context.read<EventsCubit>().search(value);
@@ -93,13 +94,14 @@ class _EventsScreenState extends State<EventsScreen> {
                 ListView.builder(
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => EventScreen(EventModel.fromJson(eventRaw)),
+                          builder: (context) => EventScreen(events[index]),
                         ));
                       },
-                      child: Row(
+                      title: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Card(
@@ -107,16 +109,18 @@ class _EventsScreenState extends State<EventsScreen> {
                             child: SizedBox.fromSize(
                               size: const Size(80, 80),
                               child: Image.network(
-                                'https://picsum.photos/100/100',
+                                'https://picsum.photos/100/100?${events[index].name}',
                                 fit: BoxFit.cover,
                               ),
                             ),
                           ),
                           Flexible(
-                              child: Text(
-                            events[index].name,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          )),
+                            child: Text(
+                              events[index].name,
+                              style: Theme.of(context).textTheme.titleLarge,
+                              maxLines: 2,
+                            ),
+                          ),
                         ],
                       ),
                     );

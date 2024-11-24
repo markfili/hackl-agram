@@ -33,7 +33,7 @@ class _EventScreenState extends State<EventScreen> {
             children: [
               Card(
                 clipBehavior: Clip.hardEdge,
-                child: Image.network('https://picsum.photos/500/500'),
+                child: Image.network('https://picsum.photos/500/500?${event.hashCode}'),
               ),
               const SizedBox(
                 height: 16,
