@@ -23,7 +23,53 @@ class MapScreen extends StatelessWidget {
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             userAgentPackageName: 'com.example.app',
-          )
+          ),
+          const MarkerLayer(
+            markers: [
+              Marker(
+                point: LatLng(45.81179428100586, 15.969405174255371),
+                child: Icon(
+                  Icons.theater_comedy,
+                  size: 40,
+                ),
+              ),
+              Marker(
+                point: LatLng(45.80135726928711, 15.97854232788086),
+                child: Icon(
+                  Icons.theater_comedy,
+                  size: 40,
+                ),
+              ),
+              Marker(
+                point: LatLng(45.8150278, 15.9746427),
+                child: Icon(
+                  Icons.theater_comedy,
+                  size: 40,
+                ),
+              ),
+              Marker(
+                point: LatLng(45.7946446, 15.943727),
+                child: Icon(
+                  Icons.theater_comedy,
+                  size: 40,
+                ),
+              ),
+              Marker(
+                point: LatLng(45.76786804199219, 15.946802139282227),
+                child: Icon(
+                  Icons.theater_comedy,
+                  size: 40,
+                ),
+              ),
+              Marker(
+                point: LatLng(45.805843, 15.9776533),
+                child: Icon(
+                  Icons.theater_comedy,
+                  size: 40,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

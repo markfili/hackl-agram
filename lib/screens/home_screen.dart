@@ -30,11 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Image.asset('assets/app_bar_background.jpeg'),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
                       const Text(
-                        "Agram program",
+                        "KulturZagreb",
                         style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       const Text(
@@ -50,9 +53,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SearchBar(
                             hintText: "Što želiš gledati?",
                           ),
-                          Positioned.fill(child: InkWell(child: Container(),onTap: () {
-                            widget.onChangePage(1, focusSearch: true);
-                          },))
+                          Positioned.fill(
+                              child: InkWell(
+                            child: Container(),
+                            onTap: () {
+                              widget.onChangePage(1, focusSearch: true);
+                            },
+                          ))
                         ],
                       ),
                     ],
@@ -63,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
             EventGroupCarousel("Popularno", homeData.popular),
             EventGroupCarousel("Danas", homeData.today),
             EventGroupCarousel("Sutra", homeData.tomorrow),
-            FeaturedEvent(getRandomEvent(homeData.tomorrow)),
+            if (homeData.tomorrow.isNotEmpty) FeaturedEvent(getRandomEvent(homeData.tomorrow)),
             const SizedBox(
               height: 16,
             ),
